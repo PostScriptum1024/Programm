@@ -14,7 +14,9 @@ import ru.mishin.MySecondSpringBoot.model.*;
 import ru.mishin.MySecondSpringBoot.service.ModifyResponseService;
 import ru.mishin.MySecondSpringBoot.service.ValidationService;
 import ru.mishin.MySecondSpringBoot.util.DateTimeUtil;
+import ru.mishin.MySecondSpringBoot.exception.UnsupportedCodeException;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -26,13 +28,13 @@ public class MyController {
     private final ModifyResponseService modifyResponseService;
 
     @Autowired
-    public MyController(ValidationService validationService, @Qualifier("ModifySystemTimeResponseService") ModifyResponseService modifyResponseService){
+    public MyController(ValidationService validationService, @Qualifier("ModifySystemTimeResponseService") ModifyResponseService modifyResponseService) {
         this.validationService = validationService;
         this.modifyResponseService = modifyResponseService;
     }
 
-    @PostMapping (value = "/feedback")
-    public ResponseEntity<Response> feedback(@RequestBody Request request, BindingResult bindingResult) {
+    @PostMapping(value = "/feedback")
+    public ResponseEntity<Response> feedback(@RequestBody Request request, BindingResult bindingResult) throws ParseException {
 
         log.info("request: {}", request);
 
@@ -44,13 +46,23 @@ public class MyController {
                 .errorCode(ErrorCodes.EMPTY)
                 .errorMessage(ErrorMessages.EMPTY)
                 .build();
+        log.info("request: {}", request);
 
         try {
+            if (Integer.parseInt(request.getUid()) == 123) {
+                throw new UnsupportedCodeException("UID 123 не поддерживается");
+            }
             validationService.isValid(bindingResult);
         } catch (ValidationFailedException e) {
             response.setCode(Codes.FAILED);
             response.setErrorCode(ErrorCodes.VALIDATION_EXCEPTION);
             response.setErrorMessage(ErrorMessages.VALIDATION);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        } catch (UnsupportedCodeException e) {
+            response.setCode(Codes.FAILED);
+            response.setErrorCode(ErrorCodes.VALIDATION_EXCEPTION);
+            response.setErrorMessage(ErrorMessages.VALIDATION);
+            log.error("Error mess:", e);
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             response.setCode(Codes.FAILED);
@@ -60,8 +72,12 @@ public class MyController {
         }
 
         modifyResponseService.modify(response);
-
+        log.info("response: {}", response);
+        SimpleDateFormat deltaTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        Date deltaTime = deltaTimeFormat.parse(request.getSystemTime());
+        log.info("delta time, ms: {}", (new Date()).getTime() - deltaTime.getTime());
         return new ResponseEntity<>(modifyResponseService.modify(response), HttpStatus.OK);
     }
 }
+
 

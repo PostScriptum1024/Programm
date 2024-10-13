@@ -2,6 +2,9 @@ package ru.mishin.MySecondSpringBoot.model;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 
 @Data
 @Builder
@@ -10,12 +13,16 @@ import lombok.*;
 public class Request {
 
     @NotBlank
+    @Size(max = 32)
     private String uid;
 
     private String operationUid;
-    private String systemName;
+    private Systems systemName;
+    @NotBlank
     private String systemTime;
     private String source;
+    @Max(100000)
+    @Min(1)
     private int communicationId;
     private int templateId;
     private int productCode;

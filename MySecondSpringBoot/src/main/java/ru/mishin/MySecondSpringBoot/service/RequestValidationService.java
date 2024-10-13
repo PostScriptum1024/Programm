@@ -3,6 +3,9 @@ package ru.mishin.MySecondSpringBoot.service;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import ru.mishin.MySecondSpringBoot.exception.ValidationFailedException;
+import ru.mishin.MySecondSpringBoot.exception.UnsupportedCodeException;
+import java.util.Objects;
+
 
 @Service
 public class RequestValidationService implements ValidationService{
@@ -12,6 +15,13 @@ public class RequestValidationService implements ValidationService{
         if (bindingResult.hasErrors()) {
             throw new
                     ValidationFailedException(bindingResult.getFieldError().toString());
+        }
+    }
+
+    @Override
+    public void isSupportedUid(String Uid) throws UnsupportedCodeException {
+        if(Objects.equals(Uid, "123")) {
+            throw new UnsupportedCodeException("Неподдерживаемый Uid");
         }
     }
 }
