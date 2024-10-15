@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.mishin.MySecondSpringBoot.exception.ValidationFailedException;
 import ru.mishin.MySecondSpringBoot.model.*;
 import ru.mishin.MySecondSpringBoot.service.ModifyResponseService;
-import ru.mishin.MySecondSpringBoot.service.ModifyRequestService;
 import ru.mishin.MySecondSpringBoot.service.ValidationService;
 import ru.mishin.MySecondSpringBoot.util.DateTimeUtil;
 import ru.mishin.MySecondSpringBoot.exception.UnsupportedCodeException;
@@ -27,20 +26,15 @@ public class MyController {
 
     private final ValidationService validationService;
     private final ModifyResponseService modifyResponseService;
-    private final ModifyRequestService modifyRequestService;
 
     @Autowired
-    public MyController(ValidationService validationService,
-                        @Qualifier("ModifySystemTimeResponseService") ModifyResponseService modifyResponseService,
-                        ModifyRequestService modifyRequestService) {
-
+    public MyController(ValidationService validationService, @Qualifier("ModifySystemTimeResponseService") ModifyResponseService modifyResponseService) {
         this.validationService = validationService;
         this.modifyResponseService = modifyResponseService;
-        this.modifyRequestService = modifyRequestService;
     }
 
     @PostMapping(value = "/feedback")
-    public ResponseEntity<Response> feedback(@RequestBody Request request, BindingResult bindingResult) {
+    public ResponseEntity<Response> feedback(@RequestBody Request request, BindingResult bindingResult) throws ParseException {
 
         log.info("request: {}", request);
 
@@ -52,6 +46,7 @@ public class MyController {
                 .errorCode(ErrorCodes.EMPTY)
                 .errorMessage(ErrorMessages.EMPTY)
                 .build();
+        log.info("request: {}", request);
 
         try {
             if (Integer.parseInt(request.getUid()) == 123) {
@@ -77,9 +72,7 @@ public class MyController {
         }
 
         modifyResponseService.modify(response);
-        modifyRequestService.modify(request);
         log.info("response: {}", response);
-        SimpleDateFormat deltaTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         return new ResponseEntity<>(modifyResponseService.modify(response), HttpStatus.OK);
     }
 }
