@@ -14,12 +14,9 @@ import ru.mishin.MySecondSpringBoot.model.*;
 import ru.mishin.MySecondSpringBoot.service.ModifyResponseService;
 import ru.mishin.MySecondSpringBoot.service.ModifyRequestService;
 import ru.mishin.MySecondSpringBoot.service.ValidationService;
-import ru.mishin.MySecondSpringBoot.util.DateTimeUtil;
+import ru.mishin.MySecondSpringBoot.util.ResponseUtil;
 import ru.mishin.MySecondSpringBoot.exception.UnsupportedCodeException;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @Slf4j
 @RestController
@@ -44,14 +41,10 @@ public class MyController {
 
         log.info("request: {}", request);
 
-        Response response = Response.builder()
-                .uid(request.getUid())
-                .operationUid(request.getOperationUid())
-                .systemTime(DateTimeUtil.getCustomFormat().format(new Date()))
-                .code(Codes.SUCCES)
-                .errorCode(ErrorCodes.EMPTY)
-                .errorMessage(ErrorMessages.EMPTY)
-                .build();
+        Response response = ResponseUtil.createSuccessResponse(request);
+
+        log.info("response: {}", response);
+
 
         try {
             if (Integer.parseInt(request.getUid()) == 123) {
@@ -78,8 +71,9 @@ public class MyController {
 
         modifyResponseService.modify(response);
         modifyRequestService.modify(request);
+
         log.info("response: {}", response);
-        SimpleDateFormat deltaTimeFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+
         return new ResponseEntity<>(modifyResponseService.modify(response), HttpStatus.OK);
     }
 }

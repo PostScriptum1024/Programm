@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum Codes {
 
-    SUCCES("succes"),
+    SUCCESS("success"),
     FAILED("failed");
 
     private final String name;
