@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        Список покупок
+    </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" th:href="@{/index}">Список покупок</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/list/all}">Покупки</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/product/all}">Товары</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/shop/all}">Магазины</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/about}">О приложении</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/logout}">Выйти</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <div class="row d-flex justify-center">
+            <div class="card col">
+                <div class="card-header" th:text="${list.email}"></div>
+                <div class="card-body">
+                    <h5 class="card-title">Список покупок</h5>
+                </div>
+                <ol class="list-group list-group-numbered">
+                    <li class="list-group-item d-flex justify-content-between align-items-start"
+                        th:each="product: ${list.products}">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold" th:text="${product.name}"></div>
+                            <p th:text="${product.shop}"></p>
+                        </div>
+                        <span class="badge bg-success rounded-pill" th:text="${product.cost} + ' р'"></span>
+                        <span class="badge bg-danger rounded-pill"
+                              style="cursor: pointer;"
+                              th:data-delete="@{/list/delete(listId=${list.id}, itemId=${product.id})}"
+                              onclick="window.location.href = this.getAttribute('data-delete');">
+                            Удалить
+                        </span>
+                    </li>
+                </ol>
+                <div class="card-body">
+                    <p class="" th:text="'Итого: ' + ${list.getSumCost() + ' р'}"></p>
+                </div>
+                <div class="card-footer" th:text="${list.date}"></div>
+            </div>
+            <div class="col">
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-start"
+                        th:each="product: ${shopProducts}">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold" th:text="${product.productName}"></div>
+                            <p th:text="${product.shopName}"></p>
+                        </div>
+                        <span class="badge bg-success rounded-pill" th:text="${product.cost} + ' р'"></span>
+                        <span class="badge bg-primary rounded-pill"
+                              style="cursor: pointer;"
+                              th:data-add="@{/list/add(listId=${list.id}, itemId=${product.id})}"
+                              onclick="window.location.href = this.getAttribute('data-add');">
+                            +
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
