@@ -2,26 +2,29 @@ package com.example.MyUIRestObService.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
-import com.example.MyUIRestObService.dao.StudentRepository;
 import com.example.MyUIRestObService.entity.Student;
+import com.example.MyUIRestObService.repository.StudentRepository;
 
 import java.util.Optional;
 
 @Slf4j
-@RestController
+@Controller
 public class StudentController {
-    private final StudentRepository studentRepository;
-
     @Autowired
-    public StudentController(StudentRepository studentRepository) { this.studentRepository = studentRepository; }
+    private StudentRepository studentRepository;
 
-    @GetMapping({"/list", "/"})
+    @GetMapping("/list")
     public ModelAndView getAllStudents() {
+        log.info("/list -> connection");
         ModelAndView mav = new ModelAndView("list-students");
         mav.addObject("students", studentRepository.findAll());
+
         return mav;
     }
 
@@ -30,29 +33,33 @@ public class StudentController {
         ModelAndView mav = new ModelAndView("add-student-form");
         Student student = new Student();
         mav.addObject("student", student);
+
         return mav;
     }
 
     @PostMapping("/saveStudent")
-    public RedirectView saveStudent(@ModelAttribute Student student) {
+    public String showUpdateForm(@ModelAttribute Student student) {
         studentRepository.save(student);
-        return new RedirectView("list");
+
+        return "redirect:/list";
     }
 
-    @GetMapping("/showUpdateForm")
-    public ModelAndView showUpdateForm(@RequestParam Integer studentId) {
+    @PostMapping("/showUpdateForm")
+    public ModelAndView showUpdateForm(@RequestParam Long studentId) {
         ModelAndView mav = new ModelAndView("add-student-form");
         Optional<Student> optionalStudent = studentRepository.findById(studentId);
         Student student = new Student();
         if (optionalStudent.isPresent())
             student = optionalStudent.get();
         mav.addObject("student", student);
+
         return mav;
     }
 
     @GetMapping("/deleteStudent")
-    public RedirectView deleteStudent(@RequestParam Integer studentId, ModelAndView model) {
+    public String deleteStudent(@RequestParam Long studentId) {
         studentRepository.deleteById(studentId);
-        return new RedirectView("list");
+
+        return "redirect:/list";
     }
 }
