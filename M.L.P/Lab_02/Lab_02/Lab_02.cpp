@@ -73,7 +73,7 @@ float max_uptriangle_values()
 // минимум нижнетреугольной части матрицы
 float min_downtriangle_values()
 {
-	float min_alue = _matrix[0][0];
+	float min_value = _matrix[0][0];
 	for (i = 0; i < N; i++)
 	{
 		for (j = 0; j < N; j++)
@@ -200,7 +200,7 @@ float midle_arithmetic_value()
 }
 
 // среднеарифметичекое значаение элементов нижнетреугольной части матрицы
-float midle_arithmetic_value()
+float midle_arithmetic_value_downtriangle()
 {
 	float sum = 0.0;
 	int nums = 0;
@@ -401,7 +401,7 @@ void sum_down_and_uptriangle()
 // элемент, наиболее близкий по значению к среднеарифметическому
 void bliz_midle_arithmetic()
 {
-	float mean = arithmetic_mean();
+	float mean = midle_arithmetic_value();
 	float minDiff = max_value();
 	float currentDiff = 0.0;
 	float result = 0.0;

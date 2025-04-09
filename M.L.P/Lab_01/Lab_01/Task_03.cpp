@@ -8,11 +8,11 @@ void Task_03()
 	void Exchange_3(int&, int&);
 
 	std::cout << "До замены: a = " << a << ", b = " << b << std::endl;
-	Exchange_01(a, b);
+	Exchange_1(a, b);
 	std::cout << "После замены: a = " << a << ", b = " << b << std::endl;
-	Exchange_02(&a, &b);
+	Exchange_2(&a, &b);
 	std::cout << "После замены*: a = " << a << ", b = " << b << std::endl;
-	Exchange_03(a, b);
+	Exchange_3(a, b);
 	std::cout << "После замены**: a = " << a << ", b = " << b << std::endl;
 }
 

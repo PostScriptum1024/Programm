@@ -3,7 +3,7 @@
 
 void Task_04()
 {
-	int mas[] = { 1, 10, 3, 8, 5, 6, 7, 4, 9, 2 };
+	int mas[] = { 2, 4, 3, 1, 8, 7, 9, 0, 10, 2};
     int size = sizeof(mas) / sizeof(mas[0]);
 
     std::cout << "Оригинальный список:\n";

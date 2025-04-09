@@ -3,7 +3,7 @@
 
 int main()
 {
-    char str1[] = "myname", str2[] = "1957534862";
+    char str1[] = "myname", str2[] = "19575";
     int strlen1(char*);
     int strlen2(char*);
     int strlen3(char*);
@@ -30,7 +30,7 @@ int main()
     char* string2 = (char*)std::malloc(100);
 
     strcpy_s(string1, 100, "MYNAME");
-    strcpy_s(string2, 100, "2684357951");
+    strcpy_s(string2, 100, "26843");
 
 
 
@@ -56,7 +56,7 @@ int main()
     string2 = (char*)std::calloc(11, sizeof(char*));
 
     strcpy_s(string1, 7, "MYNAME");
-    strcpy_s(string2, 11, "2684357951");
+    strcpy_s(string2, 11, "26843");
 
     std::cout << "Lenght_1: string1 = " << strlen1(string1) << ", string2 = " << strlen1(string2) << std::endl;
     std::cout << "Lenght_2: string1 = " << strlen2(string1) << ", string2 = " << strlen2(string2) << std::endl;
@@ -78,11 +78,13 @@ int main()
 
 }
 
+// Измерение длины строки, проходит по строке, пока не найдет \0
 int strlen1(char* str)
 {
     return (*str) ? strlen1(++str) + 1 : 0;
 }
 
+// Подсчет символов через цикл While
 int strlen2(char* str)
 {
     int result = 0;
@@ -94,6 +96,7 @@ int strlen2(char* str)
     return result;
 }
 
+// Вычисляет длину слова через разницу в символах между указателем на первый и последнйи символы
 int strlen3(char* str)
 {
     char* start = str;
@@ -102,6 +105,7 @@ int strlen3(char* str)
     return str - start;
 }
 
+// Копирует содержимое одной строки в другую
 void strcpy(char* strDestination, char* strSource)
 {
     while (*strDestination)
@@ -120,6 +124,7 @@ void strcpy(char* strDestination, char* strSource)
     }
 }
 
+// Сравнение строк
 void strcmp(char* str1, char* str2)
 {
     if (!*str1 && !*str2)
@@ -139,6 +144,7 @@ void strcmp(char* str1, char* str2)
     }
 }
 
+// Сложение строк
 void strcat(char* str1, char* str2)
 {
     char newstr[80];

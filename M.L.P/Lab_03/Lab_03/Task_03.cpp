@@ -7,11 +7,11 @@ bool isEven(int x) {
 
 void Task_03()
 {
-    int mas[] = { 1, 10, 3, 8, 5, 6, 7, 4, 9, 2 };
+    int mas[] = { 2, 13, 12, 6, 1, 3, 8, 4, 5, 7, 8, 1 };
     int size = sizeof(mas) / sizeof(mas[0]);
 
-    int even[5];
-    int odd[5];
+    int even[6];
+    int odd[6];
 
     std::cout << "Оригинальный список:\n";
     for (int i = 0; i < size; ++i)
@@ -33,8 +33,8 @@ void Task_03()
         }
     }
 
-    Sort::QuickSort(even, 0, 4);
-    Sort::QuickSortReverse(odd, 0, 4);
+    Sort::QuickSort(even, 0, 5);
+    Sort::QuickSortReverse(odd, 0, 5);
 
     // Обьединение
     int ei = 0, oi = 0;
